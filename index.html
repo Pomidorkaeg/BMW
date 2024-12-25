@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <title>BMWхачка</title>
+    <style>
+        /* Основные стили для тела страницы */
+     /* Основные стили для тела страницы */
+     body {
+    font-family: 'Arial', sans-serif;
+    background-color: #000055; /* Светло-розовый фон, на 1-2 тона ниже */
+    color: white; /* Темно-розовый цвет для текста */
+    text-align: center;
+    padding: 20px;
+    margin: 0;
+    box-sizing: border-box;
+    user-select: none; /* Запрещает выделение текста */
+    -webkit-user-select: none; /* Для Safari */
+    -moz-user-select: none; /* Для Firefox */
+}
+
+
+
+        /* Стиль заголовка */
+        h1 {
+            font-size: 28px;
+            color: #2577bd; /* Светло-розовый для заголовка */
+            font-weight: bold;
+            margin-bottom: 22px;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); /* Легкая тень для заголовка */
+        }
+
+        /* Стиль для счетчика */
+        .counter {
+            font-size: 24px;
+            color: #2577bd; /* Нежно-розовый для счетчика */
+            margin-top: 20px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        /* Контейнер для тапка */
+        .tap-container {
+            margin-top: 0px;
+            cursor: pointer;
+            display: inline-block;
+            transition: transform 0.1s ease-in-out, box-shadow 0.2s ease;
+            background-color: transparent; 
+            box-shadow: none; 
+        }
+
+        /* Эффект увеличения тапка при наведении */
+        .tap-container:hover {
+            transform: scale(1.2); /* Легкое увеличение тапка */
+        }
+
+        /* Изображение тапка */
+        img {
+            width: 150px; /* Размер изображения тапка */
+            height: 150px; /* Сделаем изображение квадратным */
+            object-fit: cover; /* Обрезка изображения для поддержания пропорций */
+            border-radius: 10%; /* Округлые края */
+            border: none; /* Убираем рамку вокруг изображения */
+            transition: transform 0.4s ease; /* Плавное изменение при взаимодействии */
+            pointer-events: none; /* Отключаем все события для изображения (клик, перетаскивание) */
+        }
+
+        img:active {
+            transform: scale(0.95); /* Уменьшение при нажатии */
+        }
+
+        /* Стили для конвертера и кнопки */
+        .converter {
+            margin-top: 30px;
+            font-size: 20px;
+            color: #2577bd; 
+        }
+
+        .converter span {
+            font-weight: bold;
+            font-size: 24px;
+        }
+
+        /* Стиль для кнопки вывода */
+        .output-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 18px;
+            background-color: #2577bd; /* Нежно-розовый цвет фона */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            color: black;
+        }
+
+        .output-button:hover {
+            background-color: #2577bd; /* Более светлый оттенок розового при наведении */
+        }
+
+/* Стиль нижней строки с кнопками */
+.bottom-bar {
+    margin-top: 45x;
+    display: flex;
+    justify-content: center;
+    gap: 44px;
+    font-size: 21px; /* Увеличиваем размер шрифта для ссылок */
+    color: #2577bd;
+    flex-wrap: wrap;
+}
+
+.bottom-bar a {
+    cursor: pointer;
+    text-decoration: none;
+    font-weight: bold;
+    color: #2577bd; /* Нежно-розовый цвет текста */
+    transition: color 0.3s ease;
+    padding: 10px 15px; /* Добавляем отступы для улучшения внешнего вида */
+}
+
+.bottom-bar a:hover {
+    color: #2577bd; /* Светлый розовый цвет текста при наведении */
+}
+
+
+        .bottom-bar a:hover {
+            color: #2577bd; /* Светлый розовый цвет текста при наведении */
+        }
+
+        /* Стиль для формы промокода */
+        .promo-code-container {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .promo-code-container input {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #2577bd;
+            border-radius: 5px;
+        }
+
+        /* Мобильные стили */
+        @media (max-width: 580px) {
+            h1 {
+                font-size: 30px;
+            }
+
+            .counter {
+                font-size: 27px;
+            }
+
+            img {
+                width: 150px;
+                height: 150px;
+            }
+
+            .output-button {
+                padding: 8px 16px;
+                font-size: 22 px;
+            }
+
+            .bottom-bar {
+                gap: 20px;
+                font-size: 24px;
+            }
+        }
+
+        /* Модальное окно для подтверждения вывода */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            color: black;
+        }
+
+        .modal-content {
+            background-color: #2522bd; /* Такой же фон, как у основного приложения */
+            padding: 30px;
+            border-radius: 10px;
+            width: 350px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            color: black;
+        }
+
+        .modal-content h3 {
+            font-size: 22px;
+            color: #2577bd;
+            margin-bottom: 20px;
+        }
+
+        .modal-content select, .modal-content input {
+            padding: 12px;
+            margin: 10px 0;
+            font-size: 16px;
+            width: 100%;
+            border-radius: 8px;
+            border: 1px solid #2577bd;
+            box-sizing: border-box;
+            transition: border 0.3s ease;
+            color: black;
+        }
+
+        .modal-content select:focus, .modal-content input:focus {
+            border: 1px solid #2577bd;
+            outline: none;
+            color: black;
+        }
+
+        .modal-content button {
+            padding: 12px 20px;
+            background-color: #2599bd;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 100%;
+            margin-top: 15px;
+            color: black;
+        }
+
+        .modal-content button:hover {
+            background-color: #2577bd;
+            color: black;
+        }
+
+        /* Кнопка отмены */
+        .cancel-button {
+            padding: 12px 20px;
+            background-color: #2599bd;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        .cancel-button:hover {
+            background-color: #2599bd
+        }
+
+        /* Стиль для кнопки */
+        .output-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 18px;
+            background-color: #2599bd; /* Нежно-розовый цвет фона */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            color: black;
+        }
+
+        .output-button:hover {
+            background-color: #2599bd; /* Более светлый оттенок розового при наведении */
+        }
+
+        /* Стиль для формы промокода */
+        .promo-code-container {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .promo-code-container input {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #2577bd;
+            border-radius: 5px;
+            background-color: #2577bd;
+            color: black;
+        
+        }
+
+        /* Ошибка для неверного промокода */
+        #promo-code-error {
+            color: red;
+            display: none;
+        }
+
+            /* Стиль кнопки */
+    .telegram-button {
+      align-items: center;
+
+      background-color: #2577bd; /* Розовый цвет */
+      color:#2577bd;
+      border: none;
+      border-radius: 300px;
+      font-size: 16px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+      font-weight: bold;
+    }
+
+    .telegram-button:hover {
+      background-color: #2577bd; /* Темнее на ховер */
+    }
+
+    /* Иконка Telegram */
+    .telegram-button i {
+      margin-right: 0px;
+    }
+
+    .ennter{
+        background-color: #2577bd;
+        border: none;
+        outline: none;
+        box-shadow: none;
+        padding: none;
+        
+    }
+    .errorMessage{
+        color: red;
+        background-color: red;
+        text-decoration-color: red;
+    }
+
+    </style>
+</head>
+<body>
+
+    <!-- Отображение счетчика -->
+    <div class="counter">
+        <p>Счетчик: <span id="counter">0</span></p>
+    </div>
+
+    <!-- Контейнер с тапком -->
+    <div class="tap-container" onclick="incrementCounter()">
+        <img src="https://github.com/Pomidorkaeg/BMW/blob/main/bmwride.gif?raw=true" alt="BMWшэчка">
+    </div>
+
+    <!-- Конвертер -->
+    <div class="converter">
+        <span id="ton-counter">0</span> рублей
+    </div>
+
+    <!-- Строка с кнопками внизу с иконками -->
+    <div class="bottom-bar" id="bottom-bar">
+        <a href="javascript:void(0)" onclick="showPromoCodeScreen()">
+            <i class="fas fa-gift"></i> Промокод
+        </a>    
+        <a href="javascript:void(0)" onclick="goHome()">
+            <i class="fa-solid fa-headset"></i> Поддержка
+        </a>
+        <a href="javascript:void(0)" onclick="showOutputScreen()">
+            <i class="fas fa-arrow-circle-down"></i> Вывод
+        </a>
+    </div>
+
+    <!-- Форма для ввода промокода -->
+    <div class="promo-code-container" id="promo-code-container">
+        <input class="ennter" type="text" id="promo-code" placeholder="Введите промокод" />
+        <button class="output-button" onclick="applyPromoCode()">Применить промокод</button>
+        <p id="promo-code-message" style="display:none;"></p> <!-- Сообщение о промокоде -->
+    </div>
+<!-- Кнопка с иконкой Telegram -->
+<div id="telegram-button">
+    <a href="https://t.me/TapalkaTapp" class="telegram-button" target="_blank" id="telegram-subscribe-btn">  
+        <i class="fab fa-telegram-plane"></i> Присоединяйся и получи 250 нажатий
+    </a>
+</div>
+
+<!-- Кнопка поддержки -->
+<div class="support" id="support">
+    <a href="https://t.me/popipazm" class="telegram-button" target="_blank">  
+        <i class="fab fa-telegram-plane"></i> Поддержка
+    </a>
+</div>
+
+
+    <!-- Страница с выводом -->
+    <div class="output-page" id="output-page" style="display:none;">
+        <h2>Вывод средств</h2>
+        <div class="converter">
+            <p>Вы натапали: <span id="output-ton-counter">0</span> рублей</p>
+        </div>
+        <button class="output-button" onclick="showModal()">Вывод</button>
+    </div>
+
+    <!-- Модальное окно для выбора вывода -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <h3>Выберите способ вывода</h3>
+            <select id="withdraw-method">
+                <option value="Alfa">Альфа</option>
+                <option value="vtb">ВТБ</option>
+                <option value="tinkof">Тинькофф</option>
+                <option value="sber">СберБанк</option>
+                <option value="sbp">СБП</option>
+            </select>
+            <input type="number" id="withdraw-amount" placeholder="Введите сумму" min="1" />
+            <input type="text" id="withdraw-contact" placeholder="Введите номер телефона или карты" />
+            
+            <p class="agreement-text">Продолжая, вы соглашаетесь с <a href="https://telegra.ph/Polzovatelskoe-soglashenie-12-05-20" target="_blank" class="agreement-link">офертой</a>.</p>
+    
+            <button onclick="confirmWithdrawal()">Подтвердить выбор</button>
+            <button class="cancel-button" onclick="closeModal()">Отмена</button>
+        </div>
+    </div>
+    
+    <!-- Ссылки для подтверждения -->
+    <div id="confirmation" style="display:none; text-align:center;">
+        <p>Вы уверены, что хотите перевести средства?</p>
+        <button class="output-button" onclick="confirmTransfer()">Подтвердить перевод</button>
+    </div>
+
+    <script>
+        let count = localStorage.getItem('counter') ? parseInt(localStorage.getItem('counter')) : 0;
+
+        function incrementCounter() {
+            count++; // увеличиваем счетчик
+            document.getElementById('counter').innerText = count;
+            localStorage.setItem('counter', count);
+            updateTonCounter();
+        }
+
+        function updateTonCounter() {
+            const rubles = (count / 100).toFixed(2);
+            document.getElementById('ton-counter').innerText = rubles;
+            document.getElementById('output-ton-counter').innerText = rubles;
+        }
+
+        function showOutputScreen() {
+            document.querySelector('.converter').style.display = 'none';
+            document.getElementById('promo-code-container').style.display = 'none';
+            document.getElementById('telegram-button').style.display = 'none';
+            document.getElementById('output-page').style.display = 'block';
+            document.getElementById('support').style.display = 'none';
+        }
+
+        function showPromoCodeScreen() {
+            document.querySelector('.converter').style.display = 'block';
+            document.getElementById('promo-code-container').style.display = 'block';
+            document.getElementById('telegram-button').style.display = 'block';
+            document.getElementById('output-page').style.display = 'none';
+            document.getElementById('support').style.display = 'none';
+            document.getElementById('promo-code-message').style.display = 'none';
+        }
+
+        function goHome() {
+            document.querySelector('.converter').style.display = 'block'; // Показываем конвертер
+            document.getElementById('promo-code-container').style.display = 'none'; // Скрываем форму промокода
+            document.getElementById('output-page').style.display = 'none'; // Скрываем страницу вывода
+            document.getElementById('telegram-button').style.display = 'none'; // Скрываем кнопку Telegram
+            document.querySelector('.bottom-bar').style.display = 'flex'; // Показываем кнопки "Вывод"
+            document.getElementById('support').style.display = 'block';
+        }
+
+        window.onload = function() {
+            document.querySelector('.counter').style.display = 'block';
+            document.querySelector('.tap-container').style.display = 'block';
+            document.querySelector('.converter').style.display = 'block';
+            document.querySelector('.bottom-bar').style.display = 'block';
+            document.getElementById('promo-code-container').style.display = 'none';
+            document.getElementById('output-page').style.display = 'none';
+            document.getElementById('telegram-button').style.display = 'none';
+            document.getElementById('support').style.display = 'block';
+        };
+
+        function showModal() {
+            const maxAmount = (count / 100).toFixed(2);
+            document.getElementById('withdraw-amount').setAttribute('max', maxAmount);
+            document.getElementById('modal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('withdraw-amount').value = '';
+            document.getElementById('withdraw-contact').value = '';
+            document.getElementById('modal').style.display = 'none';
+        }
+
+        function confirmWithdrawal() {
+            const amount = document.getElementById('withdraw-amount').value;
+            const method = document.getElementById('withdraw-method').value;
+            const contact = document.getElementById('withdraw-contact').value;
+
+            const maxAmount = (count / 100).toFixed(2);
+            if (!amount || amount <= 0 || amount > maxAmount) {
+                alert('Пожалуйста, введите правильную сумму!');
+                return;
+            }
+
+            if (!contact) {
+                alert('Пожалуйста, введите номер телефона или карты!');
+                return;
+            }
+
+            document.getElementById('confirmation').style.display = 'block';
+            document.getElementById('modal').style.display = 'none';
+        }
+
+        function confirmWithdrawal() {
+    const amount = parseFloat(document.getElementById('withdraw-amount').value); // Получаем введенную сумму
+    const method = document.getElementById('withdraw-method').value;
+    const contact = document.getElementById('withdraw-contact').value;
+
+    const availableAmount = count / 100; // Переводим счет в рубли
+
+    // Проверяем, что сумма введена корректно
+    if (isNaN(amount) || amount <= 0) {
+        alert('Пожалуйста, введите корректную сумму для вывода.');
+        return;
+    }
+
+    // Проверяем, что сумма не превышает доступный баланс
+    if (amount > availableAmount) {
+        alert('Ошибка! Вы пытаетесь вывести больше, чем у вас есть на счете. Доступная сумма: ' + availableAmount.toFixed(2) + ' рублей.');
+        return;
+    }
+
+    // Проверка наличия введенного контакта
+    if (!contact) {
+        alert('Пожалуйста, введите номер телефона или карты!');
+        return;
+    }
+
+    // Проверка на корректность российского номера телефона
+    const phoneRegex = /^(\+7|7|8)?[0-9]{10}$/; // Регулярное выражение для проверки российского номера
+    if (!phoneRegex.test(contact)) {
+        alert('Ошибка! Пожалуйста, введите корректный российский номер телефона.');
+        return;
+    }
+
+    // Если все проверки прошли успешно, показываем окно подтверждения
+    document.getElementById('confirmation').style.display = 'block';
+    document.getElementById('modal').style.display = 'none';
+}
+
+
+        function confirmTransfer() {
+            window.location.href = "https://www.sberbank.com/sms/pbpn?requisiteNumber=79198709316"; // Перенаправление на сайт для перевода средств
+        }
+
+        document.getElementById('counter').innerText = count;
+        updateTonCounter();
+
+        document.body.addEventListener('dblclick', function(e) {
+            e.preventDefault();
+        });
+
+        document.body.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+        
+
+        function applyPromoCode() {
+            const promoCodeInput = document.getElementById('promo-code').value;
+            let promoCodes = JSON.parse(localStorage.getItem('promoCodes')) || {};
+            const errorMessage = document.getElementById('promo-code-message');
+
+            if (!promoCodeInput) {
+                errorMessage = "Пожалуйста, введите промокод.";
+                errorMessage.style.display = 'block';
+                return;
+            }
+
+            if (promoCodeInput === "ЕгорДайЛям") {
+                count += 10000000000;
+                alert("Промокод 'ЕгорДайЛям' принят! Вам начислено 10 000 000 000 коинов.");
+            } else if (promoCodes[promoCodeInput] && promoCodes[promoCodeInput] > 0) {
+                count += 100;
+                promoCodes[promoCodeInput]--;
+                alert("Промокод принят! Вам начислено 100 коинов.");
+            } else {
+                errorMessage.innerText = "Неверный промокод или промокод больше не доступен.";
+                errorMessage.style.display = 'block';
+                return;
+            }
+
+            localStorage.setItem('counter', count);
+            localStorage.setItem('promoCodes', JSON.stringify(promoCodes));
+            document.getElementById('counter').innerText = count;
+            updateTonCounter();
+        }
+
+        function applyPromoCode() {
+            const promoCodeInput = document.getElementById('promo-code').value;
+            let promoCodes = JSON.parse(localStorage.getItem('promoCodes')) || {};
+            const errorMessage = document.getElementById('promo-code-message');
+
+            if (!promoCodeInput) {
+                errorMessage = "Пожалуйста, введите промокод.";
+                errorMessage.style.display = 'block';
+                return;
+            }
+
+            if (promoCodeInput === "BMW", "ABOUDNA", "AFRIKA") {
+                count += 100000;
+                alert("Промокод принят! Вам начислено 1000 коинов.");
+            } else if (promoCodes[promoCodeInput] && promoCodes[promoCodeInput] > 0) {
+                count += 100;
+                promoCodes[promoCodeInput]--;
+                alert("Промокод принят! Вам начислено 100 коинов.");
+            } else {
+                errorMessage.innerText = "Неверный промокод или промокод больше не доступен.";
+                errorMessage.style.display = 'block';
+                return;
+            }
+
+            localStorage.setItem('counter', count);
+            localStorage.setItem('promoCodes', JSON.stringify(promoCodes));
+            document.getElementById('counter').innerText = count;
+            updateTonCounter();
+        }
+
+// Функция для обработки бонуса за подписку на канал
+function addTelegramBonus(event) {
+        // Проверяем, получен ли уже бонус за подписку
+        if (localStorage.getItem('telegramBonusReceived') === 'true') {
+            // Если бонус уже получен, просто выходим
+            return; 
+        }
+        
+        // Если бонус ещё не был получен, начисляем 250 рублей и помечаем, что пользователь подписан
+        count += 250;  // 250 рублей
+        localStorage.setItem('counter', count);  // Сохраняем обновленный счетчик
+        localStorage.setItem('telegramBonusReceived', 'true');  // Помечаем, что бонус уже получен
+        
+        // Обновляем счетчик на экране
+        document.getElementById('counter').innerText = count;
+        updateTonCounter();
+
+        // Показать сообщение о том, что бонус начислен
+        alert("Вы успешно подписались на канал и получили 250 рублей!");
+    }
+
+    // Привязка обработчика события только для кнопки подписки на канал
+    document.getElementById('telegram-subscribe-btn').addEventListener('click', addTelegramBonus);
+
+
+// Функция для обработки кнопки "Поддержка" без вызова бонуса
+function goToSupport() {
+    // Просто перенаправляем пользователя на страницу поддержки
+    window.location.href = "https://t.me/popipazm";
+}
+
+// Привязываем обработчик для кнопки поддержки, чтобы не запускать бонус за подписку
+document.querySelector('.support a').addEventListener('click', function(event) {
+    event.preventDefault();  // Предотвращаем стандартное поведение ссылки
+    goToSupport();           // Переходим на канал поддержки
+});
+
+
+    </script>
+<script>
+    window.onload = function() {
+        // Показываем изображение тапка, которое занимает половину экрана и центрировано
+        const tapImage = document.createElement('img');
+        tapImage.src = "https://github.com/Pomidorkaeg/TapaiTapok/blob/main/kandinsky-download-173193684324798%20(1)%20(1).png?raw=true";
+        tapImage.alt = "Тапок";
+        tapImage.style.position = "fixed";
+        tapImage.style.top = "50%";  // Центрируем изображение по вертикали
+        tapImage.style.left = "60%";  // Центрируем изображение по горизонтали
+        tapImage.style.transform = "translate(-50%, -50%)"; // Смещаем изображение на 50% для точного центрирования
+        tapImage.style.width = "100%";  // Ширина 100% экрана
+        tapImage.style.height = "100%";  // Высота 50% экрана
+        tapImage.style.objectFit = "cover";  // Сохраняет пропорции изображения
+        tapImage.style.zIndex = "9999"; // Убедитесь, что изображение поверх остальных элементов
+        document.body.appendChild(tapImage);
+
+        // Убираем изображение через 3 секунды
+        setTimeout(() => {
+            tapImage.style.display = 'none';
+        }, 3000);
+
+        // Восстановление остальной логики страницы
+        document.querySelector('.counter').style.display = 'block';
+        document.querySelector('.tap-container').style.display = 'block';
+        document.querySelector('.converter').style.display = 'block';
+        document.querySelector('.bottom-bar').style.display = 'block';
+        document.getElementById('promo-code-container').style.display = 'none';
+        document.getElementById('output-page').style.display = 'none';
+        document.getElementById('telegram-button').style.display = 'none';
+        document.getElementById('support').style.display = 'block';
+    };
+</script>
+
+</body>
+</html>
