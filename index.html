@@ -74,20 +74,20 @@
         /* Стили для конвертера и кнопки */
         .converter {
             margin-top: 30px;
-            font-size: 20px;
+            font-size: 15px;
             color: #2577bd; 
         }
 
         .converter span {
             font-weight: bold;
-            font-size: 24px;
+            font-size: 15px;
         }
 
         /* Стиль для кнопки вывода */
         .output-button {
             margin-top: 20px;
             padding: 10px 20px;
-            font-size: 18px;
+            font-size: 15px;
             background-color: #2577bd; /* Нежно-розовый цвет фона */
             border: none;
             border-radius: 5px;
@@ -106,7 +106,7 @@
     display: flex;
     justify-content: center;
     gap: 44px;
-    font-size: 21px; /* Увеличиваем размер шрифта для ссылок */
+    font-size: 15px; /* Увеличиваем размер шрифта для ссылок */
     color: #2577bd;
     flex-wrap: wrap;
 }
@@ -137,7 +137,7 @@
 
         .promo-code-container input {
             padding: 10px;
-            font-size: 16px;
+            font-size: 15px;
             border: 1px solid #2577bd;
             border-radius: 5px;
         }
@@ -145,11 +145,11 @@
         /* Мобильные стили */
         @media (max-width: 580px) {
             h1 {
-                font-size: 30px;
+                font-size: 20px;
             }
 
             .counter {
-                font-size: 27px;
+                font-size: 15px;
             }
 
             img {
@@ -159,12 +159,12 @@
 
             .output-button {
                 padding: 8px 16px;
-                font-size: 22 px;
+                font-size: 16 px;
             }
 
             .bottom-bar {
                 gap: 20px;
-                font-size: 24px;
+                font-size: 16px;
             }
         }
 
@@ -194,7 +194,7 @@
         }
 
         .modal-content h3 {
-            font-size: 22px;
+            font-size: 15px;
             color: #2577bd;
             margin-bottom: 20px;
         }
@@ -202,7 +202,7 @@
         .modal-content select, .modal-content input {
             padding: 12px;
             margin: 10px 0;
-            font-size: 16px;
+            font-size: 15px;
             width: 100%;
             border-radius: 8px;
             border: 1px solid #2577bd;
@@ -254,7 +254,7 @@
         .output-button {
             margin-top: 20px;
             padding: 10px 20px;
-            font-size: 18px;
+            font-size: 15px;
             background-color: #2599bd; /* Нежно-розовый цвет фона */
             border: none;
             border-radius: 5px;
@@ -275,7 +275,7 @@
 
         .promo-code-container input {
             padding: 10px;
-            font-size: 16px;
+            font-size: 15px;
             border: 1px solid #2577bd;
             border-radius: 5px;
             background-color: #2577bd;
@@ -293,11 +293,10 @@
     .telegram-button {
       align-items: center;
 
-      background-color: #2577bd; /* Розовый цвет */
       color:#2577bd;
       border: none;
       border-radius: 300px;
-      font-size: 16px;
+      font-size: 15px;
       cursor: pointer;
       text-decoration: none;
       transition: background-color 0.3s ease;
@@ -327,9 +326,19 @@
         text-decoration-color: red;
     }
 
+    .bmw{
+        color: #2577bd;
+        font-size: 25px;
+        font-weight: bold;
+    }
+
     </style>
 </head>
 <body>
+
+    <div  class="bmw">
+        <p>BMWшэчка</p>
+    </div>
 
     <!-- Отображение счетчика -->
     <div class="counter">
@@ -343,7 +352,7 @@
 
     <!-- Конвертер -->
     <div class="converter">
-        <span id="ton-counter">0</span> рублей
+        <span id="ton-counter">0</span> колес
     </div>
 
     <!-- Строка с кнопками внизу с иконками -->
@@ -384,7 +393,7 @@
     <div class="output-page" id="output-page" style="display:none;">
         <h2>Вывод средств</h2>
         <div class="converter">
-            <p>Вы натапали: <span id="output-ton-counter">0</span> рублей</p>
+            <p>Вы получили: <span id="output-ton-counter">0</span> рублей</p>
         </div>
         <button class="output-button" onclick="showModal()">Вывод</button>
     </div>
@@ -394,10 +403,6 @@
         <div class="modal-content">
             <h3>Выберите способ вывода</h3>
             <select id="withdraw-method">
-                <option value="Alfa">Альфа</option>
-                <option value="vtb">ВТБ</option>
-                <option value="tinkof">Тинькофф</option>
-                <option value="sber">СберБанк</option>
                 <option value="sbp">СБП</option>
             </select>
             <input type="number" id="withdraw-amount" placeholder="Введите сумму" min="1" />
@@ -417,20 +422,31 @@
     </div>
 
     <script>
-        let count = localStorage.getItem('counter') ? parseInt(localStorage.getItem('counter')) : 0;
+        // Инициализация данных
+let userData = JSON.parse(localStorage.getItem('userData')) || {
+    counter: 0,
+    promoCodes: {}, // Промокоды
+    telegramBonusReceived: false // Бонус за подписку на Telegram
+};
 
-        function incrementCounter() {
-            count++; // увеличиваем счетчик
-            document.getElementById('counter').innerText = count;
-            localStorage.setItem('counter', count);
-            updateTonCounter();
-        }
+// Функция для обновления данных
+function saveUserData() {
+    localStorage.setItem('userData', JSON.stringify(userData));
+}
+// Функция для увеличения счетчика
+function incrementCounter() {
+    userData.counter++; // увеличиваем счетчик
+    document.getElementById('counter').innerText = userData.counter;
+    saveUserData();
+    updateTonCounter();
+}
 
-        function updateTonCounter() {
-            const rubles = (count / 100).toFixed(2);
-            document.getElementById('ton-counter').innerText = rubles;
-            document.getElementById('output-ton-counter').innerText = rubles;
-        }
+        // Функция для обновления рублевого значения
+function updateTonCounter() {
+    const rubles = (userData.counter / 100).toFixed(2);
+    document.getElementById('ton-counter').innerText = rubles;
+    document.getElementById('output-ton-counter').innerText = rubles;
+}
 
         function showOutputScreen() {
             document.querySelector('.converter').style.display = 'none';
@@ -459,6 +475,8 @@
         }
 
         window.onload = function() {
+            document.getElementById('counter').innerText = userData.counter;
+            updateTonCounter();
             document.querySelector('.counter').style.display = 'block';
             document.querySelector('.tap-container').style.display = 'block';
             document.querySelector('.converter').style.display = 'block';
@@ -555,90 +573,59 @@
         });
         
 
-        function applyPromoCode() {
-            const promoCodeInput = document.getElementById('promo-code').value;
-            let promoCodes = JSON.parse(localStorage.getItem('promoCodes')) || {};
-            const errorMessage = document.getElementById('promo-code-message');
+        // Пример использования промокода
+function applyPromoCode() {
+    const promoCodeInput = document.getElementById('promo-code').value;
+    const errorMessage = document.getElementById('promo-code-message');
 
-            if (!promoCodeInput) {
-                errorMessage = "Пожалуйста, введите промокод.";
-                errorMessage.style.display = 'block';
-                return;
-            }
+    if (!promoCodeInput) {
+        errorMessage.innerText = "Пожалуйста, введите промокод.";
+        errorMessage.style.display = 'block';
+        return;
+    }
 
-            if (promoCodeInput === "ЕгорДайЛям") {
-                count += 10000000000;
-                alert("Промокод 'ЕгорДайЛям' принят! Вам начислено 10 000 000 000 коинов.");
-            } else if (promoCodes[promoCodeInput] && promoCodes[promoCodeInput] > 0) {
-                count += 100;
-                promoCodes[promoCodeInput]--;
-                alert("Промокод принят! Вам начислено 100 коинов.");
-            } else {
-                errorMessage.innerText = "Неверный промокод или промокод больше не доступен.";
-                errorMessage.style.display = 'block';
-                return;
-            }
+    if (promoCodeInput === "ЕгорДайЛям") {
+        userData.counter += 10000000000;
+        alert("Промокод 'ЕгорДайЛям' принят! Вам начислено 10 000 000 000 коинов.");
+    } else if (userData.promoCodes[promoCodeInput] && userData.promoCodes[promoCodeInput] > 0) {
+        userData.counter += 100;
+        userData.promoCodes[promoCodeInput]--;
+        alert("Промокод принят! Вам начислено 100 коинов.");
+    } else {
+        errorMessage.innerText = "Неверный промокод или промокод больше не доступен.";
+        errorMessage.style.display = 'block';
+        return;
+    }
 
-            localStorage.setItem('counter', count);
-            localStorage.setItem('promoCodes', JSON.stringify(promoCodes));
-            document.getElementById('counter').innerText = count;
-            updateTonCounter();
-        }
-
-        function applyPromoCode() {
-            const promoCodeInput = document.getElementById('promo-code').value;
-            let promoCodes = JSON.parse(localStorage.getItem('promoCodes')) || {};
-            const errorMessage = document.getElementById('promo-code-message');
-
-            if (!promoCodeInput) {
-                errorMessage = "Пожалуйста, введите промокод.";
-                errorMessage.style.display = 'block';
-                return;
-            }
-
-            if (promoCodeInput === "BMW", "ABOUDNA", "AFRIKA") {
-                count += 100000;
-                alert("Промокод принят! Вам начислено 1000 коинов.");
-            } else if (promoCodes[promoCodeInput] && promoCodes[promoCodeInput] > 0) {
-                count += 100;
-                promoCodes[promoCodeInput]--;
-                alert("Промокод принят! Вам начислено 100 коинов.");
-            } else {
-                errorMessage.innerText = "Неверный промокод или промокод больше не доступен.";
-                errorMessage.style.display = 'block';
-                return;
-            }
-
-            localStorage.setItem('counter', count);
-            localStorage.setItem('promoCodes', JSON.stringify(promoCodes));
-            document.getElementById('counter').innerText = count;
-            updateTonCounter();
-        }
+    saveUserData();
+    document.getElementById('counter').innerText = userData.counter;
+    updateTonCounter();
+}
 
 // Функция для обработки бонуса за подписку на канал
 function addTelegramBonus(event) {
-        // Проверяем, получен ли уже бонус за подписку
-        if (localStorage.getItem('telegramBonusReceived') === 'true') {
-            // Если бонус уже получен, просто выходим
-            return; 
-        }
-        
-        // Если бонус ещё не был получен, начисляем 250 рублей и помечаем, что пользователь подписан
-        count += 250;  // 250 рублей
-        localStorage.setItem('counter', count);  // Сохраняем обновленный счетчик
-        localStorage.setItem('telegramBonusReceived', 'true');  // Помечаем, что бонус уже получен
-        
-        // Обновляем счетчик на экране
-        document.getElementById('counter').innerText = count;
-        updateTonCounter();
-
-        // Показать сообщение о том, что бонус начислен
-        alert("Вы успешно подписались на канал и получили 250 рублей!");
+    // Проверяем, получен ли уже бонус за подписку
+    if (userData.telegramBonusReceived) {
+        // Если бонус уже получен, просто выходим
+        return;
     }
 
-    // Привязка обработчика события только для кнопки подписки на канал
-    document.getElementById('telegram-subscribe-btn').addEventListener('click', addTelegramBonus);
+    // Если бонус ещё не был получен, начисляем 250 рублей и помечаем, что пользователь подписан
+    userData.counter += 250;  // 250 рублей
+    userData.telegramBonusReceived = true;  // Помечаем, что бонус уже получен
 
+    saveUserData();  // Сохраняем обновленные данные
+
+    // Обновляем счетчик на экране
+    document.getElementById('counter').innerText = userData.counter;
+    updateTonCounter();
+
+    // Показать сообщение о том, что бонус начислен
+    alert("Вы успешно подписались на канал и получили 250 рублей!");
+}
+
+// Привязка обработчика события только для кнопки подписки на канал
+document.getElementById('telegram-subscribe-btn').addEventListener('click', addTelegramBonus);
 
 // Функция для обработки кнопки "Поддержка" без вызова бонуса
 function goToSupport() {
@@ -654,38 +641,5 @@ document.querySelector('.support a').addEventListener('click', function(event) {
 
 
     </script>
-<script>
-    window.onload = function() {
-        // Показываем изображение тапка, которое занимает половину экрана и центрировано
-        const tapImage = document.createElement('img');
-        tapImage.src = "https://github.com/Pomidorkaeg/TapaiTapok/blob/main/kandinsky-download-173193684324798%20(1)%20(1).png?raw=true";
-        tapImage.alt = "Тапок";
-        tapImage.style.position = "fixed";
-        tapImage.style.top = "50%";  // Центрируем изображение по вертикали
-        tapImage.style.left = "60%";  // Центрируем изображение по горизонтали
-        tapImage.style.transform = "translate(-50%, -50%)"; // Смещаем изображение на 50% для точного центрирования
-        tapImage.style.width = "100%";  // Ширина 100% экрана
-        tapImage.style.height = "100%";  // Высота 50% экрана
-        tapImage.style.objectFit = "cover";  // Сохраняет пропорции изображения
-        tapImage.style.zIndex = "9999"; // Убедитесь, что изображение поверх остальных элементов
-        document.body.appendChild(tapImage);
-
-        // Убираем изображение через 3 секунды
-        setTimeout(() => {
-            tapImage.style.display = 'none';
-        }, 3000);
-
-        // Восстановление остальной логики страницы
-        document.querySelector('.counter').style.display = 'block';
-        document.querySelector('.tap-container').style.display = 'block';
-        document.querySelector('.converter').style.display = 'block';
-        document.querySelector('.bottom-bar').style.display = 'block';
-        document.getElementById('promo-code-container').style.display = 'none';
-        document.getElementById('output-page').style.display = 'none';
-        document.getElementById('telegram-button').style.display = 'none';
-        document.getElementById('support').style.display = 'block';
-    };
-</script>
-
 </body>
 </html>
